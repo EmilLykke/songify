@@ -17,12 +17,16 @@ export default function Songs({params}:any) {
     
       useEffect(()=>{
           fetch("http://localhost:3000/api/songs/"+access_token).then(res => res.json()).then(data => setSongsState(data))
-      },[])
+      })
 
   return (
     <div>
       {songs.map((data: any)=>(
-      <p>{data.name}</p>
+      <div key={data.name}>
+        <p>{data.name}</p>
+
+      </div>
+      
     ))}
     </div>
   )

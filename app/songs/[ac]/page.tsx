@@ -14,10 +14,6 @@ export default function Songs({params}:any) {
       },[])
     }
 
-    useEffect(()=>{
-      console.log(songs)
-    },[songs])
-
 
   return (
     <div>

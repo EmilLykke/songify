@@ -6,14 +6,18 @@ export default function Songs({params}:any) {
   const [songs, setSongsState] = useState<any>([]);
     const url = params;
     
+    let access_token:string;
     
     if(url["ac"] != null){
-      const access_token = url["ac"]
+       access_token = url["ac"]
+    } else{
+      access_token = "";
+    }
+
+    
       useEffect(()=>{
           fetch("http://localhost:3000/api/songs/"+access_token).then(res => res.json()).then(data => setSongsState(data))
       },[])
-    }
-
 
   return (
     <div>

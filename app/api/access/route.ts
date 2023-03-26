@@ -2,6 +2,7 @@ import axios from 'axios';
 import { NextRequest } from 'next/server';
 import qs from 'querystring';
 
+
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
@@ -43,7 +44,7 @@ export async function GET(request: NextRequest) {
 
       } else{
 
-
+    
     const tokenResponse = await axios.post(
         'https://accounts.spotify.com/api/token',
         qs.stringify({
@@ -59,7 +60,7 @@ export async function GET(request: NextRequest) {
         },
         );
         const {access_token} = tokenResponse.data
-        
+
     return Response.redirect(url+"/songs/"+access_token);
 }
 

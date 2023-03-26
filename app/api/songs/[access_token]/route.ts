@@ -10,7 +10,6 @@ function selectFiveGenres(list:any){
         let r = Math.floor(Math.random() * 125) + 1;
         if(arr.indexOf(r) === -1) arr.push(r);
     }
-    // console.log(arr); 
     
     let total: string = "";
 
@@ -53,7 +52,7 @@ function selectFiveArtists(list:any){
 
 export async function GET(request: Request, params: any) {
     const access = params["params"]["access_token"]
-
+    
     const genres = await axios.get(
       'https://api.spotify.com/v1/recommendations/available-genre-seeds',
       {
@@ -68,7 +67,6 @@ export async function GET(request: Request, params: any) {
 
     
     let genreString: string = selectFiveGenres(genresList);
-
     
     
     const artists: any = await axios.get(
@@ -124,8 +122,8 @@ export async function GET(request: Request, params: any) {
           "Authorization": "Bearer "+access
         },
       },
-    );
-      
+    )
+    // console.log(songs)
     // console.log(songs.data.tracks[0]);
 
     return NextResponse.json(songs.data.tracks); // Redirect the user back to the homepage or another page in your application

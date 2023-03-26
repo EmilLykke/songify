@@ -1,5 +1,6 @@
-export default async function Auth() {
 
+
+export default function Auth() {
 
     return (
       <main>

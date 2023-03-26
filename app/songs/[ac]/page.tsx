@@ -16,9 +16,9 @@ export default function Songs({params}:any) {
       access_token = "";
     }
      
-      useEffect(()=>{
-          fetch("/api/songs/"+access_token).then(res => res.json()).then(data => setSongsState(data))
-      },[par])
+    useEffect(()=>{
+      fetch("/api/songs/"+access_token).then(res => res.json()).then(data => setSongsState(data))
+    },[par])
 
   return (
     <div className="grid gap-[50px] grid-cols-fluid m-16 spot">

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { NextRequest } from 'next/server';
 import qs from 'querystring';
 
 const CLIENT_ID = process.env.CLIENT_ID;
@@ -10,12 +11,10 @@ const arr = re?.split("/");
 const url = arr[0] + "//" + arr[2];
 
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
 
     let params = request.url.split("?")
-    console.log(params)
     params = params[1].split("&")
-    
     var code = params[0].replace("code=","") || null;
     var state = params[1].replace("state=","") || null;
 

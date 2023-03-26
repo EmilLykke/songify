@@ -11,6 +11,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/home',
+        destination: '/songs',
+        permanent: true,
+      },
+      {
         source: '/songs',
         destination: '/api/auth',
         permanent: true,

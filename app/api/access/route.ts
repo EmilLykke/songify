@@ -11,12 +11,33 @@ const arr = re?.split("/");
 const url = arr[0] + "//" + arr[2];
 
 
+function splitUrl(url: string){
+    let params = url.split("?")
+    let params1 = params[1]
+    let code;
+    let state;
+    if(params1.indexOf("state=")==0){
+        params = params[1].split("&")
+        code = params[1].replace("code=","") || null;
+        state = params[0].replace("state=","") || null;
+    } else {
+        params = params[1].split("&")
+        code = params[0].replace("code=","") || null;
+        state = params[1].replace("state=","") || null;
+    }
+
+    let arr = [code,state]
+
+    return arr;
+}
+
+
 export async function GET(request: NextRequest) {
 
-    let params = request.url.split("?")
-    params = params[1].split("&")
-    var code = params[1].replace("code=","") || null;
-    var state = params[0].replace("state=","") || null;
+    let params = splitUrl(request.url)
+    
+    var code = params[0]
+    var state = params[1]
 
     if (state === null) {
         return Response.redirect("/#"+qs.stringify({error: "state_mismatch"}),302);
@@ -41,7 +62,6 @@ export async function GET(request: NextRequest) {
         const {access_token} = tokenResponse.data
         
     return Response.redirect(url+"/songs/"+access_token);
-    // return new Response(code);
 }
 
   }

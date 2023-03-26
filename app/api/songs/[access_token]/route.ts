@@ -126,7 +126,7 @@ export async function GET(request: Request, params: any) {
       },
     );
       
-    // console.log(songs.data.tracks);
+    // console.log(songs.data.tracks[0]);
 
     return NextResponse.json(songs.data.tracks); // Redirect the user back to the homepage or another page in your application
   }

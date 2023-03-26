@@ -1,18 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react";
-
-const REDIRECT_URI = process.env.REDIRECT_URI;
-const re = REDIRECT_URI || "https://songify-psi.vercel.app/";
-const arr = re?.split("/");
-
-
-const url = arr[0] + "//" + arr[2];
-
-
+import Song from "../Song";
 
 export default function Songs({params}:any) {
-
 
   const [songs, setSongsState] = useState<any>([]);
     const par = params;
@@ -25,15 +16,14 @@ export default function Songs({params}:any) {
     }
      
       useEffect(()=>{
-          fetch(url+"/api/songs/"+access_token).then(res => res.json()).then(data => setSongsState(data))
+          fetch("/api/songs/"+access_token).then(res => res.json()).then(data => setSongsState(data))
       },[par])
 
   return (
-    <div>
+    <div className="grid gap-16 grid-cols-fluid m-16">
       {songs.map((data: any)=>(
       <div key={data.name}>
-        <p>{data.name}</p>
-
+        <Song link={data.external_urls.spotify} />
       </div>
       
     ))}

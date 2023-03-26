@@ -3,14 +3,14 @@ import qs from 'querystring';
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URI = process.env.REDIRECT_URI|| "";
-const arr = REDIRECT_URI?.split("/");
+const REDIRECT_URI = process.env.REDIRECT_URI;
+const re = REDIRECT_URI || "";
+const arr = re?.split("/");
 
 const url = arr[0] + "//" + arr[2];
 
 
 export async function GET(request: Request) {
-
 
     let params = request.url.split("?")
     params = params[1].split("&")

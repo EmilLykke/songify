@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 
-const REDIRECT_URI = process.env.REDIRECT_URI || "http://localhost:3000/";
-const arr = REDIRECT_URI?.split("/") ;
+const REDIRECT_URI = process.env.REDIRECT_URI;
+const re = REDIRECT_URI || "http://localhost:3000/";
+const arr = re?.split("/");
+
 
 const url = arr[0] + "//" + arr[2];
 

@@ -3,10 +3,14 @@ import qs from 'querystring';
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URI = process.env.REDIRECT_URI;
+const REDIRECT_URI = process.env.REDIRECT_URI|| "";
+const arr = REDIRECT_URI?.split("/");
+
+const url = arr[0] + "//" + arr[2];
 
 
 export async function GET(request: Request) {
+
 
     let params = request.url.split("?")
     params = params[1].split("&")
@@ -36,7 +40,7 @@ export async function GET(request: Request) {
         );
         const {access_token} = tokenResponse.data
         
-    return Response.redirect("http://localhost:3000/songs/"+access_token);
+    return Response.redirect(url+"/songs/"+access_token);
 }
 
   }

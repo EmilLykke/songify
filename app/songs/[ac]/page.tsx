@@ -2,22 +2,29 @@
 
 import { useEffect, useState } from "react";
 
+const REDIRECT_URI = process.env.REDIRECT_URI || "http://localhost:3000/";
+const arr = REDIRECT_URI?.split("/") ;
+
+const url = arr[0] + "//" + arr[2];
+
+
+
 export default function Songs({params}:any) {
+
+
   const [songs, setSongsState] = useState<any>([]);
-    const url = params;
-    
+    const par = params;
     let access_token:string;
     
-    if(url["ac"] != null){
-       access_token = url["ac"]
+    if(par["ac"] != null){
+       access_token = par["ac"]
     } else{
       access_token = "";
     }
-
      
       useEffect(()=>{
-          fetch("http://localhost:3000/api/songs/"+access_token).then(res => res.json()).then(data => setSongsState(data))
-      })
+          fetch(url+"/api/songs/"+access_token).then(res => res.json()).then(data => setSongsState(data))
+      },[par])
 
   return (
     <div>

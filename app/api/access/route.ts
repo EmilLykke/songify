@@ -24,23 +24,24 @@ export async function GET(request: NextRequest) {
       } else{
 
 
-    const tokenResponse = await axios.post(
-        'https://accounts.spotify.com/api/token',
-        qs.stringify({
-            grant_type: 'authorization_code',
-            code:code,
-            redirect_uri: REDIRECT_URI,
-        }),
-        {
-            headers: {
-            "Content-Type": "application/x-www-form-urlencoded", 
-            'Authorization':'Basic ' + (new Buffer(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64'))
-            },
-        },
-        );
-        const {access_token} = tokenResponse.data
+    // const tokenResponse = await axios.post(
+    //     'https://accounts.spotify.com/api/token',
+    //     qs.stringify({
+    //         grant_type: 'authorization_code',
+    //         code:code,
+    //         redirect_uri: REDIRECT_URI,
+    //     }),
+    //     {
+    //         headers: {
+    //         "Content-Type": "application/x-www-form-urlencoded", 
+    //         'Authorization':'Basic ' + (new Buffer(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64'))
+    //         },
+    //     },
+    //     );
+    //     const {access_token} = tokenResponse.data
         
-    return Response.redirect(url+"/songs/"+access_token);
+    // return Response.redirect(url+"/songs/"+access_token);
+    return new Response(params.toString());
 }
 
   }

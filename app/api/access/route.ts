@@ -27,7 +27,6 @@ function splitUrl(url: string){
     }
 
     let arr = [code,state]
-
     return arr;
 }
 

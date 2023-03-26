@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import Song from "../Song";
+import { Spotify } from "react-spotify-embed";
 
 export default function Songs({params}:any) {
 
@@ -23,7 +23,7 @@ export default function Songs({params}:any) {
     <div className="grid gap-16 grid-cols-fluid m-16">
       {songs.map((data: any)=>(
       <div key={data.name}>
-        <Song link={data.external_urls.spotify} />
+        <Spotify link={data.external_urls.spotify} />
       </div>
       
     ))}

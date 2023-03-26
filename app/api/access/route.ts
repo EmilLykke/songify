@@ -13,6 +13,7 @@ const url = arr[0] + "//" + arr[2];
 export async function GET(request: Request) {
 
     let params = request.url.split("?")
+    console.log(params)
     params = params[1].split("&")
     
     var code = params[0].replace("code=","") || null;

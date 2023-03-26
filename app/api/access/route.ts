@@ -15,8 +15,8 @@ export async function GET(request: NextRequest) {
 
     let params = request.url.split("?")
     params = params[1].split("&")
-    var code = params[0].replace("code=","") || null;
-    var state = params[1].replace("state=","") || null;
+    var code = params[1].replace("code=","") || null;
+    var state = params[0].replace("state=","") || null;
 
     if (state === null) {
         return Response.redirect("/#"+qs.stringify({error: "state_mismatch"}),302);

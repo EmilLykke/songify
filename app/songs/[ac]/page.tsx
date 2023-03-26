@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 const REDIRECT_URI = process.env.REDIRECT_URI;
-const re = REDIRECT_URI || "http://localhost:3000/";
+const re = REDIRECT_URI || "https://songify-psi.vercel.app/";
 const arr = re?.split("/");
 
 

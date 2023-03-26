@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
     //     const {access_token} = tokenResponse.data
         
     // return Response.redirect(url+"/songs/"+access_token);
-    return new Response(params.toString());
+    return new Response(code);
 }
 
   }

@@ -15,9 +15,11 @@ export default function Songs({params}:any) {
     } else{
       access_token = "";
     }
-     
+
     useEffect(()=>{
-      fetch("/api/songs/"+access_token).then(res => res.json()).then(data => setSongsState(data))
+      fetch("/api/songs/"+access_token).then(res => res.json()).then(data => setSongsState(data)).catch(error => {
+        globalThis.window.location.href = "/songs"
+      })
     },[par])
 
   return (

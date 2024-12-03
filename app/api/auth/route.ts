@@ -1,21 +1,44 @@
 import qs from 'querystring';
-const crypto = require("crypto")
+import crypto from 'crypto';
 
-const CLIENT_ID = process.env.CLIENT_ID;
-const REDIRECT_URI = process.env.REDIRECT_URI;
-const SCOPES = 'user-read-email user-read-private user-top-read user-library-read';
+const CLIENT_ID = process.env.CLIENT_ID || '';
+const REDIRECT_URI = process.env.REDIRECT_URI || '';
+const SCOPES = [
+  'user-read-email',
+  'user-read-private',
+  'user-top-read',
+  'user-library-read',
+].join(' ');
 
-const state =  crypto.randomBytes(16).toString('hex');
+if (!CLIENT_ID || !REDIRECT_URI) {
+  throw new Error('Missing required environment variables: CLIENT_ID or REDIRECT_URI.');
+}
+
+/**
+ * Generates a random state string for OAuth2 to prevent CSRF attacks.
+ * @returns {string} A random hexadecimal string.
+ */
+function generateState(): string {
+  return crypto.randomBytes(16).toString('hex');
+}
 
 export async function GET(request: Request) {
-    return Response.redirect('https://accounts.spotify.com/authorize?'+
-    qs.stringify({
+  try {
+    const state = generateState();
+
+    const queryParams = qs.stringify({
       response_type: 'code',
       redirect_uri: REDIRECT_URI,
       client_id: CLIENT_ID,
       scope: SCOPES,
-      state: state,
-    }),302); // Redirect the user back to the homepage or another page in your application
-    
+      state,
+    });
+
+    const spotifyAuthUrl = `https://accounts.spotify.com/authorize?${queryParams}`;
+
+    return Response.redirect(spotifyAuthUrl, 302);
+  } catch (error) {
+    console.error('Error generating Spotify authorization URL:', error);
+    return new Response('Internal Server Error', { status: 500 });
   }
-  
+}

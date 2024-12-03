@@ -2,67 +2,68 @@ import axios from 'axios';
 import { NextRequest } from 'next/server';
 import qs from 'querystring';
 
+const CLIENT_ID = process.env.CLIENT_ID || '';
+const CLIENT_SECRET = process.env.CLIENT_SECRET || '';
+const REDIRECT_URI = process.env.REDIRECT_URI || '';
 
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URI = process.env.REDIRECT_URI;
-const re = REDIRECT_URI || "";
-const arr = re?.split("/");
+if (!CLIENT_ID || !CLIENT_SECRET || !REDIRECT_URI) {
+  throw new Error('Missing required environment variables: CLIENT_ID, CLIENT_SECRET, or REDIRECT_URI.');
+}
 
-const url = arr[0] + "//" + arr[2];
+/**
+ * Extracts the authorization code and state from a URL query string.
+ * @param {string} url - The full URL to parse.
+ * @returns {[string | null, string | null]} An array containing the authorization code and state.
+ */
+function extractCodeAndState(url: string): [string | null, string | null] {
+  const query = new URL(url).searchParams;
+  const code = query.get('code');
+  const state = query.get('state');
+  return [code, state];
+}
 
+export async function GET(request: NextRequest): Promise<Response> {
+  try {
+    const [code, state] = extractCodeAndState(request.url);
 
-function splitUrl(url: string){
-    let params = url.split("?")
-    let params1 = params[1]
-    let code;
-    let state;
-    if(params1.indexOf("state=")==0){
-        params = params[1].split("&")
-        code = params[1].replace("code=","") || null;
-        state = params[0].replace("state=","") || null;
-    } else {
-        params = params[1].split("&")
-        code = params[0].replace("code=","") || null;
-        state = params[1].replace("state=","") || null;
+    if (!state) {
+      return Response.redirect(
+        `/#${qs.stringify({ error: 'state_mismatch' })}`,
+        302
+      );
     }
 
-    let arr = [code,state]
-    return arr;
-}
+    if (!code) {
+      return new Response('Authorization code not found', { status: 400 });
+    }
 
-
-export async function GET(request: NextRequest) {
-
-    let params = splitUrl(request.url)
-    
-    var code = params[0]
-    var state = params[1]
-
-    if (state === null) {
-        return Response.redirect("/#"+qs.stringify({error: "state_mismatch"}),302);
-
-      } else{
-
-    
     const tokenResponse = await axios.post(
-        'https://accounts.spotify.com/api/token',
-        qs.stringify({
-            grant_type: 'authorization_code',
-            code:code,
-            redirect_uri: REDIRECT_URI,
-        }),
-        {
-            headers: {
-            "Content-Type": "application/x-www-form-urlencoded", 
-            'Authorization':'Basic ' + (new Buffer(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64'))
-            },
+      'https://accounts.spotify.com/api/token',
+      qs.stringify({
+        grant_type: 'authorization_code',
+        code,
+        redirect_uri: REDIRECT_URI,
+        state
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Authorization: `Basic ${Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')}`,
         },
-        );
-        const {access_token} = tokenResponse.data
+      }
+    );
 
-    return Response.redirect(url+"/songs/"+access_token);
-}
+    console.log({tokenReposne: tokenResponse.data })
+    const { access_token, refresh_token } = tokenResponse.data;
 
+    // Construct the redirect URL using the base of the redirect URI
+    const baseRedirectUrl = new URL(REDIRECT_URI).origin;
+    const urlParams = new URLSearchParams()
+    urlParams.set('access_token', access_token)
+    urlParams.set('refresh_token', refresh_token)
+    return Response.redirect(`${baseRedirectUrl}/songs?${urlParams.toString()}`, 302);
+  } catch (error) {
+    console.error('Error during token exchange or redirection:', error);
+    return new Response('Internal Server Error', { status: 500 });
   }
-  
+}

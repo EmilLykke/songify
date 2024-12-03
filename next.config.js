@@ -4,7 +4,8 @@ const nextConfig = {
   env: {
     CLIENT_ID: process.env.CLIENT_ID,
     CLIENT_SECRET: process.env.CLIENT_SECRET,
-    REDIRECT_URI: process.env.REDIRECT_URI
+    REDIRECT_URI: process.env.REDIRECT_URI,
+    OPENAI_API_KEY:process.env.OPENAI_API_KEY
   },
 
 
@@ -12,11 +13,6 @@ const nextConfig = {
     return [
       {
         source: '/',
-        destination: '/songs',
-        permanent: true,
-      },
-      {
-        source: '/songs',
         destination: '/api/auth',
         permanent: true,
       },

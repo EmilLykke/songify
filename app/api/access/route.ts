@@ -53,7 +53,6 @@ export async function GET(request: NextRequest): Promise<Response> {
       }
     );
 
-    console.log({tokenReposne: tokenResponse.data })
     const { access_token, refresh_token } = tokenResponse.data;
 
     // Construct the redirect URL using the base of the redirect URI

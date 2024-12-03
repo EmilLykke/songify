@@ -10,16 +10,16 @@ const nextConfig = {
 
   async redirects() {
     return [
-      // {
-      //   source: '/',
-      //   destination: '/songs',
-      //   permanent: true,
-      // },
-      // {
-      //   source: '/songs',
-      //   destination: '/api/auth',
-      //   permanent: true,
-      // },
+      {
+        source: '/',
+        destination: '/songs',
+        permanent: true,
+      },
+      {
+        source: '/songs',
+        destination: '/api/auth',
+        permanent: true,
+      },
     ]
   },
 }

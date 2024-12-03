@@ -3,11 +3,10 @@
 import { useEffect, useState } from "react";
 import { Spotify } from "react-spotify-embed";
 import "./page.scss"
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export default function Songs() {
   const params = useSearchParams()
-
 
   const [songs, setSongsState] = useState([]);
 

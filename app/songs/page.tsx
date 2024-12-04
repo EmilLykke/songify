@@ -3,20 +3,27 @@
 import { useEffect, useState } from "react";
 import { Spotify } from "react-spotify-embed";
 import "./page.scss"
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Songs() {
   const params = useSearchParams()
+  const router = useRouter()
 
   const [songs, setSongsState] = useState([]);
 
   useEffect(() => {
     const getSongs = async () => {
-      const access_token = params.get('access_token')
-      const refresh_token = params.get('refresh_token')
-      const res =  await fetch(`/api/songs`, {method: 'POST', body: JSON.stringify({access_token, refresh_token})})
-      const resJson = await res.json()
-      setSongsState(resJson)
+        const access_token = params.get('access_token')
+        const refresh_token = params.get('refresh_token')
+        const res =  await fetch(`/api/songs`, {method: 'POST', body: JSON.stringify({access_token, refresh_token})})
+
+        if(res.status === 500){
+          router.push('/')
+          return
+        }
+
+        const resJson = await res.json()
+        setSongsState(resJson)
     }
     getSongs()
   }, [params])

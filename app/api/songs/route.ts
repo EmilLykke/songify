@@ -22,11 +22,14 @@ export async function POST(request: Request) {
   try {
     const api = SpotifyApi.withAccessToken(CLIENT_ID || "", accesToken);
 
+    // list of terms
+    // const terms = ['long_term', 'medium_term', 'short_term'];
+
     // Fetch user's top artists
-    const topArtistsResponse = await api.currentUser.topItems('artists', 'long_term',50, Math.floor(Math.random()*30));
+    const topArtistsResponse = await api.currentUser.topItems('artists', 'long_term',20, Math.floor(Math.random()*30));
     const artistsList = topArtistsResponse.items.map((artist) => artist.name);
 
-    const topTracks = await api.currentUser.topItems('tracks', 'long_term', 50, Math.floor(Math.random()*30));
+    const topTracks = await api.currentUser.topItems('tracks', 'long_term', 20, Math.floor(Math.random()*30));
     const trackList = topTracks.items
     const trackNames = trackList.map((track)=> `Song name: ${track.name}; Artists: ${track.artists.map((artist)=>artist.name).join(',')}`)
 
